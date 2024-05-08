@@ -1,0 +1,16 @@
+#[sources.in]
+#type = "socket"
+#address = "0.0.0.0:9000"
+#mode = "tcp"
+#decoding.codec = "json"
+#framing.method = "newline_delimited"
+##path = "/path/to/socket"
+
+[sources.in]
+type = "python_source"
+
+[sinks.out]
+type = "file"
+inputs = ["in"]
+path = "/tmp/abc.txt"
+encoding.codec = "json" # required

@@ -1,3 +1,6 @@
 /target
 .venv/
 .idea/
+.task/
+test_outputs/
+integration.toml

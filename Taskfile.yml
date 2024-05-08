@@ -1,0 +1,17 @@
+version: "3"
+
+interval: 1s
+
+tasks:
+  develop:
+    watch: true
+    sources:
+      - src/*.rs
+      - Cargo.*
+      - test.py
+      - integration.toml
+    cmds:
+      - maturin develop
+      - echo Running Python
+      - ./.venv/bin/python test.py
+      - echo Finished Running

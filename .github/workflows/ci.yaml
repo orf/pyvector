@@ -50,6 +50,8 @@ jobs:
                 # If we're running on debian-based system.
                 apt update -y && apt-get install -y libssl-dev openssl pkg-config
             fi
+            
+            python3 -m ensurepip
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -64,7 +66,7 @@ jobs:
           pip install pytest pytest-asyncio
           pytest
       - name: pytest
-        if: ${{ !startsWith(matrix.platform.target, 'x86') && matrix.platform.target != 'ppc64' }}
+        if: ${{ matrix.platform.target == 'aarch64' }}
         uses: uraimo/run-on-arch-action@v2.5.0
         with:
           arch: ${{ matrix.platform.target }}

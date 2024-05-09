@@ -53,11 +53,11 @@ impl Vector {
         app_lock.replace(stopped);
     }
 
-    async fn send(&self, name: String, contents: Vec<u8>) {
+    async fn send(&self, source: String, data: Vec<u8>) {
         let app_lock = self.app.read().await;
         if let Some(app) = app_lock.as_ref() {
-            let sender = app.get_sender(&name).await;
-            sender.send(Bytes::from(contents)).await.unwrap();
+            let sender = app.get_sender(&source).await;
+            sender.send(Bytes::from(data)).await.unwrap();
         }
     }
 
@@ -66,20 +66,6 @@ impl Vector {
     //     for metric in metrics {
     //         println!("Name: {}, Value: {}", metric.name(), metric.value());
     //     }
-    // }
-    //
-    //
-    // async fn send_batch(&self, name: String, contents: Vec<Vec<u8>>) {
-    //     let reg: &ChannelRegistry = self.context.get().unwrap();
-    //     let sender = reg.get_sender(&name).await.unwrap();
-    //     for item in contents {
-    //         sender.send(item.into()).await.unwrap();
-    //     }
-    // }
-    //
-    //
-    // async fn send(&self, name: String, contents: Vec<u8>) {
-    //     self.send_batch(name, vec![contents]).await;
     // }
 }
 

@@ -5,7 +5,7 @@ use derivative::Derivative;
 use serde_with::serde_as;
 use tokio::sync::mpsc::{channel, Receiver, Sender};
 use tokio::sync::RwLock;
-use tracing::info;
+use tracing::debug;
 use vector::config::SourceContext;
 use vector::config::{ComponentKey, LogNamespace, SourceConfig, SourceOutput};
 use vector::shutdown::ShutdownSignal;
@@ -78,15 +78,6 @@ impl SourceConfig for PythonSourceConfig {
     }
     fn outputs(&self, global_log_namespace: LogNamespace) -> Vec<SourceOutput> {
         let schema_definition = self.decoding.schema_definition(global_log_namespace);
-        // .with_standard_vector_source_metadata()
-        // .with_source_metadata(
-        //     PythonSourceConfig::NAME,
-        //     None,
-        //     // Some(LegacyKey::InsertIfEmpty(owned_value_path!("service"))),
-        //     &owned_value_path!("service"),
-        //     Kind::any_object(),
-        //     Some("service"),
-        // );
 
         vec![SourceOutput::new_logs(
             self.decoding.output_type(),
@@ -106,7 +97,7 @@ async fn python_source(
     log_namespace: LogNamespace,
     deserializer: Deserializer,
 ) -> Result<(), ()> {
-    info!("Python source started");
+    debug!("Python source started");
     // let mut stream = ReceiverStream::new(receiver);
     let mut counter = 0;
 
@@ -134,11 +125,11 @@ async fn python_source(
             }
 
             _ = &mut shutdown => {
-                info!("Shutting down");
+                debug!("Shutting down");
                 break;
             },
         }
     }
-    info!("Python source processed {counter} messages");
+    debug!("Python source processed {counter} messages");
     Ok(())
 }

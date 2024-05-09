@@ -41,7 +41,7 @@ jobs:
         with:
           target: ${{ matrix.platform.target }}
           args: --profile=ci --out dist --find-interpreter
-          sccache: 'true'
+#          sccache: 'true'
           manylinux: 2_28
           before-script-linux: |
             # If we're running on rhel centos, install needed packages.
@@ -51,9 +51,7 @@ jobs:
                 # If we're running on debian-based system.
                 apt update -y && apt-get install -y libssl-dev openssl pkg-config python3-pip
             fi
-            
-            python3 -m pip install "sccache>=0.4.0
-            
+
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:

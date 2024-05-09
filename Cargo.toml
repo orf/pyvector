@@ -34,4 +34,4 @@ once_cell = "1.19.0"
 
 
 [profile.ci]
-inherits = "debug"
+inherits = "dev"

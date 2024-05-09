@@ -40,8 +40,8 @@ jobs:
         with:
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter
-#          sccache: 'true'
-          manylinux: 2_28
+          sccache: 'true'
+          manylinux: 2_24
           before-script-linux: |
             # If we're running on rhel centos, install needed packages.
             if command -v yum &> /dev/null; then

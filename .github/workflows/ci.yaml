@@ -40,7 +40,7 @@ jobs:
         with:
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter
-#          sccache: 'true'
+          sccache: 'true'
           manylinux: 2_28
           before-script-linux: |
             # If we're running on rhel centos, install needed packages.

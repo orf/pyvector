@@ -5,9 +5,10 @@ Combine the power of [Vector](https://vector.dev/) with Python! This is very WIP
 ## What is this?
 
 This library integrates Vector with Python (without using an external process), and provides a custom `python` source 
-that allows you to send in-memory data to Vector. You can use any [of the many available sinks](https://vector.dev/docs/reference/configuration/sinks/) 
-to send this data anywhere, with Vector handling all the complexities around batching, buffering to disk or memory, 
-retries, rate-limiting, partitioning, authentication, backpressure and more.
+that allows you to send in-memory data to Vector with minimal copying. You can use any 
+[of the many available sinks](https://vector.dev/docs/reference/configuration/sinks/) to send this data anywhere, with 
+Vector handling all the complexities around batching, buffering to disk or memory, retries, rate-limiting, partitioning,
+authentication, backpressure and more.
 
 The code below sends 1 million events to a SQS queue, a S3 bucket and an Elasticsearch cluster:
 

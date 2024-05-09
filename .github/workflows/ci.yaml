@@ -48,7 +48,7 @@ jobs:
                 yum update -y && yum install -y perl-core openssl openssl-devel pkgconfig protobuf-compiler python3.11-pip
             else
                 # If we're running on debian-based system.
-                apt update -y && apt-get install -y libssl-dev openssl pkg-config protobuf-compiler python3.11-pip
+                apt update -y && apt-get install -y libssl-dev openssl pkg-config protobuf-compiler python3-pip
             fi
       - name: Upload wheels
         uses: actions/upload-artifact@v4

@@ -9,7 +9,7 @@ use tokio::sync::{Notify};
 use tokio::task::JoinHandle;
 use tokio_stream::wrappers::UnboundedReceiverStream;
 use tokio_stream::StreamExt;
-use tracing::{info, warn};
+use tracing::{debug, warn};
 use vector::config::Config;
 use vector::extra_context::ExtraContext;
 use vector::signal::{ShutdownError, SignalRx, SignalTo};
@@ -155,7 +155,7 @@ impl VectorApp {
                 // Trigger graceful shutdown if a component crashed, or all sources have ended.
                 error = graceful_crash.next() => break SignalTo::Shutdown(error),
                 _ = TopologyController::sources_finished(topology_controller.clone()), if has_sources => {
-                    info!("All sources have finished.");
+                    debug!("All sources have finished.");
                     break SignalTo::Shutdown(None)
                 } ,
                 else => unreachable!("Signal streams never end"),

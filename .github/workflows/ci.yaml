@@ -48,7 +48,7 @@ jobs:
           PROTOC_VERSION: "3.19.5"
           MOLD_VERSION: "2.31.0"
         with:
-          target: ${{ matrix.platform.target }}
+          target: "${{ matrix.platform.target }}"
           args: --profile=ci --out dist --interpreter=python${{ matrix.platform.python }}
           manylinux: 2_28
           before-script-linux: |

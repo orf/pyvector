@@ -44,7 +44,6 @@ jobs:
       - name: Build wheels
         uses: orf/maturin-action@move-pre-script
         env:
-          PROTOC_RELEASE_ARCH: ${{ matrix.platform.target == 'aarch64' && 'aarch_64' || 'x86_64' }}
           PROTOC_VERSION: "3.19.5"
           MOLD_VERSION: "2.31.0"
         with:
@@ -69,7 +68,7 @@ jobs:
 
               local base_url="https://github.com/protocolbuffers/protobuf/releases/download"
               local url
-              url="${base_url}/v${version}/protoc-${version}-linux-${{ env.PROTOC_RELEASE_ARCH }}.zip"
+              url="${base_url}/v${version}/protoc-${version}-linux-x86_64.zip"
               local download_path="${TMP_DIR}/protoc.zip"
 
               echo "Downloading ${url}"
@@ -80,12 +79,14 @@ jobs:
             }
             
             install_protoc "${{ env.PROTOC_VERSION }}" "/usr/bin/protoc"
-            readonly MOLD_URL="https://github.com/rui314/mold/releases/download/v${{ env.MOLD_VERSION }}/mold-${{ env.MOLD_VERSION }}-${{ matrix.platform.target }}-linux.tar.gz"
+            readonly MOLD_URL="https://github.com/rui314/mold/releases/download/v${{ env.MOLD_VERSION }}/mold-${{ env.MOLD_VERSION }}-x86_64-linux.tar.gz"
             echo "Downloading Mold from $MOLD_URL"
             curl -fsSL "$MOLD_URL" -o "${TMP_DIR}/mold.tar.gz"
             tar xvf "${TMP_DIR}/mold.tar.gz" --directory=/
             export PROTOC="/usr/bin/protoc"
             file "$PROTOC"
+            
+            mold --version
             "$PROTOC" --version
 
 #      - name: Upload wheels

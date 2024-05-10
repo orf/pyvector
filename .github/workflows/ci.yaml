@@ -45,10 +45,10 @@ jobs:
           before-script-linux: |
             # If we're running on rhel centos, install needed packages.
             if command -v yum &> /dev/null; then
-                yum update -y && yum install -y perl-core openssl openssl-devel pkgconfig python3.11-pip unzip libzstd-devel
+                yum update -y && yum install -y perl-core openssl openssl-devel pkgconfig python3.11-pip unzip libzstd-devel cmake
             else
                 # If we're running on debian-based system.
-                apt update -y && apt-get install -y libssl-dev openssl pkg-config python3-pip unzip libzstd-dev
+                apt update -y && apt-get install -y libssl-dev openssl pkg-config python3-pip unzip libzstd-dev cmake
             fi
             
             readonly TMP_DIR="$(mktemp -d -t "protoc_XXXX")"

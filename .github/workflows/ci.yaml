@@ -116,6 +116,7 @@ jobs:
           run: |
             set -e
             pip3 install pyvector-rs --find-links dist --force-reinstall
+            pip install pytest pytest-asyncio
             pytest
 
 #  windows:

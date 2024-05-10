@@ -76,7 +76,6 @@ jobs:
             readonly MOLD_URL="${{ env.MOLD_URL }}"
             echo "Downloading Mold from $MOLD_URL"
             curl -fsSL "$MOLD_URL" -o "${TMP_DIR}/mold.tar.gz"
-            file "${TMP_DIR}/mold.tar.gz"
             tar xvf "${TMP_DIR}/mold.tar.gz" --directory=/
 
       - name: Upload wheels

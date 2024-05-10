@@ -80,7 +80,7 @@ lto = "thin"
 [profile.ci]
 inherits = "dev"
 incremental = false
-debug = false
+debug = "line-tables-only"
 opt-level = 1
 lto = "thin"
 

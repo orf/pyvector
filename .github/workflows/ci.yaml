@@ -41,6 +41,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           cache-on-failure: "true"
+          key: "${{ matrix.platform.target }}-${{ matrix.platform.python }}"
 
       - name: Build wheels
         uses: orf/maturin-action@move-pre-script

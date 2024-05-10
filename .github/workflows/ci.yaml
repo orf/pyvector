@@ -86,7 +86,6 @@ jobs:
             
             export PROTOC="/usr/bin/protoc"
             
-#            mold --version
             "$PROTOC" --version
 
 #      - name: Upload wheels

@@ -23,15 +23,19 @@ jobs:
             target: x86_64
           - runner: ubuntu-latest
             target: aarch64
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+
       - name: Build wheels
 #        uses: PyO3/maturin-action@v1
 
         uses: orf/maturin-action@move-pre-script
+        env:
+          PROTOC_RELEASE_ARCH: ${{ matrix.target == 'aarch64' && 'aarch_64' || 'x86_64' }}
         with:
           target: ${{ matrix.platform.target }}
           args: --profile=ci --out dist --find-interpreter
@@ -40,11 +44,33 @@ jobs:
           before-script-linux: |
             # If we're running on rhel centos, install needed packages.
             if command -v yum &> /dev/null; then
-                yum update -y && yum install -y perl-core openssl openssl-devel pkgconfig protobuf-compiler python3.11-pip
+                yum update -y && yum install -y perl-core openssl openssl-devel pkgconfig python3.11-pip
             else
                 # If we're running on debian-based system.
-                apt update -y && apt-get install -y libssl-dev openssl pkg-config protobuf-compiler python3-pip
+                apt update -y && apt-get install -y libssl-dev openssl pkg-config python3-pip
             fi
+            
+            readonly TMP_DIR="$(mktemp -d -t "protoc_XXXX")"
+            
+            install_protoc() {
+              local version=$1
+              local install_path=$2
+
+              local base_url="https://github.com/protocolbuffers/protobuf/releases/download"
+              local url
+              url="${base_url}/v${version}/protoc-${version}-linux-${{ env.PROTOC_RELEASE_ARCH }}.zip"
+              local download_path="${TMP_DIR}/protoc.zip"
+
+              echo "Downloading ${url}"
+              curl -fsSL "${url}" -o "${download_path}"
+
+              unzip -qq "${download_path}" -d "${TMP_DIR}"
+              mv --force --verbose "${TMP_DIR}/bin/protoc" "${install_path}"
+            }
+            
+            install_protoc "3.19.5" "/usr/bin/protoc"
+            
+
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:

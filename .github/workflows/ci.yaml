@@ -41,6 +41,9 @@ jobs:
 
 #        uses: PyO3/maturin-action@v1
       - uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: "true"
+
       - name: Build wheels
         uses: orf/maturin-action@move-pre-script
         env:

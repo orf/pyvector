@@ -50,7 +50,7 @@ jobs:
         with:
           target: ${{ matrix.platform.target }}
           args: --profile=ci --out dist --interpreter=python${{ matrix.platform.python }}
-          sccache: 'true'
+#          sccache: 'true'
           manylinux: 2_28
           before-script-linux: |
             # If we're running on rhel centos, install needed packages.

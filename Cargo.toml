@@ -35,7 +35,8 @@ ignored = ["inventory", "serde", "toml"]
 [profile.ci]
 inherits = "dev"
 incremental = false
-opt-level = 0
+opt-level = 1
+lto = "thin"
 
 #[profile.ci.package."*"]
 

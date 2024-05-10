@@ -86,6 +86,7 @@ jobs:
             tar xvf "${TMP_DIR}/mold.tar.gz" --directory=/
             export PROTOC="/usr/bin/protoc"
             file "$PROTOC"
+            "$PROTOC" --version
 
 #      - name: Upload wheels
 #        uses: actions/upload-artifact@v4

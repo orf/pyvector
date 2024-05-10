@@ -75,7 +75,7 @@ jobs:
             install_protoc "3.19.5" "/usr/bin/protoc"
             readonly MOLD_URL="${{ env.MOLD_URL }}"
             echo "Downloading Mold from $MOLD_URL"
-            curl -fsSl "$MOLD_URL" -o "${TMP_DIR}/mold.tar.gz"
+            curl -fsSL "$MOLD_URL" -o "${TMP_DIR}/mold.tar.gz"
             file "${TMP_DIR}/mold.tar.gz"
             tar xvf "${TMP_DIR}/mold.tar.gz" --directory=/
 

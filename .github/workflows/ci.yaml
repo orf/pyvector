@@ -40,7 +40,7 @@ jobs:
           MOLD_URL: "https://github.com/rui314/mold/releases/download/v2.31.0/mold-2.31.0-${{ matrix.platform.target }}-linux.tar.gz"
         with:
           target: ${{ matrix.platform.target }}
-          args: --profile=ci --out dist --find-interpreter
+          args: --profile=ci --out dist --find-interpreter --interpreter=python3.10
           sccache: 'true'
           manylinux: 2_28
           before-script-linux: |
@@ -74,7 +74,7 @@ jobs:
             readonly MOLD_URL="${{ env.MOLD_URL }}"
             echo "Downloading Mold from $MOLD_URL"
             curl -fsSl "$MOLD_URL" -o "${TMP_DIR}/mold.tar.gz"
-            tar xf "${TMP_DIR}/mold.tar.gz" --directory=/
+            tar xvf "${TMP_DIR}/mold.tar.gz" --directory=/
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4

@@ -36,8 +36,8 @@ jobs:
 
         uses: orf/maturin-action@move-pre-script
         env:
-          PROTOC_RELEASE_ARCH: ${{ matrix.target == 'aarch64' && 'aarch_64' || 'x86_64' }}
-          MOLD_URL: "https://github.com/rui314/mold/releases/download/v2.31.0/mold-2.31.0-${{ matrix.target }}-linux.tar.gz"
+          PROTOC_RELEASE_ARCH: ${{ matrix.platform.target == 'aarch64' && 'aarch_64' || 'x86_64' }}
+          MOLD_URL: "https://github.com/rui314/mold/releases/download/v2.31.0/mold-2.31.0-${{ matrix.platform.target }}-linux.tar.gz"
         with:
           target: ${{ matrix.platform.target }}
           args: --profile=ci --out dist --find-interpreter

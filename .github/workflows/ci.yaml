@@ -84,10 +84,13 @@ jobs:
             curl -fsSL "$MOLD_URL" -o "${TMP_DIR}/mold.tar.gz"
             tar -C /usr/local --strip-components=1 --no-overwrite-dir -xzf "${TMP_DIR}/mold.tar.gz"
             
+            ln -sf /usr/local/bin/mold "$(realpath /usr/bin/ld)"
+            
             export PROTOC="/usr/bin/protoc"
             
             "$PROTOC" --version
             mold --version
+            ld --version
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4

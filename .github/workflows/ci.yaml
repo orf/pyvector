@@ -79,15 +79,15 @@ jobs:
             }
             
             install_protoc "${{ env.PROTOC_VERSION }}" "/usr/bin/protoc"
-            #readonly MOLD_URL="https://github.com/rui314/mold/releases/download/v${{ env.MOLD_VERSION }}/mold-${{ env.MOLD_VERSION }}-x86_64-linux.tar.gz"
-            #echo "Downloading Mold from $MOLD_URL"
-            #curl -fsSL "$MOLD_URL" -o "${TMP_DIR}/mold.tar.gz"
-            #tar xvf "${TMP_DIR}/mold.tar.gz" --directory=/ --strip-components=1
+            readonly MOLD_URL="https://github.com/rui314/mold/releases/download/v${{ env.MOLD_VERSION }}/mold-${{ env.MOLD_VERSION }}-x86_64-linux.tar.gz"
+            echo "Downloading Mold from $MOLD_URL"
+            curl -fsSL "$MOLD_URL" -o "${TMP_DIR}/mold.tar.gz"
+            tar -C /usr/local --strip-components=1 --no-overwrite-dir "${TMP_DIR}/mold.tar.gz"
             
             export PROTOC="/usr/bin/protoc"
-            file $PROTOC
             
-            /usr/bin/protoc --version
+            "$PROTOC" --version
+            mold --version
 
 #      - name: Upload wheels
 #        uses: actions/upload-artifact@v4

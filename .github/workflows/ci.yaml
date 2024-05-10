@@ -87,7 +87,7 @@ jobs:
             export PROTOC="/usr/bin/protoc"
             file $PROTOC
             
-            "$PROTOC" --version
+            /usr/bin/protoc --version
 
 #      - name: Upload wheels
 #        uses: actions/upload-artifact@v4

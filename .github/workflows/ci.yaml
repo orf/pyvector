@@ -85,6 +85,7 @@ jobs:
             tar xvf "${TMP_DIR}/mold.tar.gz" --directory=/ --strip-components=1
             
             export PROTOC="/usr/bin/protoc"
+            file $PROTOC
             
             "$PROTOC" --version
 

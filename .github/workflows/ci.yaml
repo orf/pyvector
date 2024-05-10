@@ -38,11 +38,11 @@ jobs:
           mkdir -p .cargo/
           cp misc/ci-mold-linker.toml .cargo/config.toml
 
-      - name: Build wheels
+
 #        uses: PyO3/maturin-action@v1
       - uses: Swatinem/rust-cache@v2
-
-      - uses: orf/maturin-action@move-pre-script
+      - name: Build wheels
+        uses: orf/maturin-action@move-pre-script
         env:
           PROTOC_RELEASE_ARCH: ${{ matrix.platform.target == 'aarch64' && 'aarch_64' || 'x86_64' }}
           PROTOC_VERSION: "3.19.5"

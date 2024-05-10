@@ -71,7 +71,9 @@ jobs:
             
             install_protoc "3.19.5" "/usr/bin/protoc"
             
-            curl -fsSl "https://github.com/rui314/mold/releases/download/v2.31.0/mold-2.31.0-${{ matrix.target }}-linux.tar.gz" -o "${TMP_DIR}/mold.tar.gz"
+            readonly MOLD_URL="https://github.com/rui314/mold/releases/download/v2.31.0/mold-2.31.0-${{ matrix.target }}-linux.tar.gz"
+            echo "Downloading Mold from $MOLD_URL"
+            curl -fsSl "$MOLD_URL" -o "${TMP_DIR}/mold.tar.gz"
             tar xf "${TMP_DIR}/mold.tar.gz" /
 
       - name: Upload wheels

@@ -89,11 +89,11 @@ jobs:
             "$PROTOC" --version
             mold --version
 
-#      - name: Upload wheels
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: wheels-linux-${{ matrix.platform.target }}
-#          path: dist
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-linux-${{ matrix.platform.target }}
+          path: dist
 #      - name: pytest
 #        if: ${{ startsWith(matrix.platform.target, 'x86_64') }}
 #        shell: bash

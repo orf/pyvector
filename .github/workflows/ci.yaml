@@ -27,10 +27,6 @@ jobs:
       env:
         PIP_CACHE_DIR: "/var/cache/pip/"
 
-    env:
-      SCCACHE_GHA_ENABLED: "true"
-      RUSTC_WRAPPER: "sccache"
-
     steps:
       - uses: actions/checkout@v4
 
@@ -74,14 +70,17 @@ jobs:
       - name: List Python versions
         run: maturin list-python
 
+      # Workaround for https://github.com/PyO3/maturin/pull/2083
       - name: Debug metadata
         run:
-          cargo metadata --no-deps
+          cargo metadata > /dev/null
 
       - name: Build wheels
         shell: bash
         env:
           RUST_LOG: "maturin=debug"
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
         run:
           maturin build \
             --interpreter=python3.9 \ 
@@ -109,9 +108,6 @@ jobs:
             target: x86_64-apple-darwin
           - runner: macos-14
             target: aarch64-apple-darwin
-    env:
-      SCCACHE_GHA_ENABLED: "true"
-      RUSTC_WRAPPER: "sccache"
     steps:
       - uses: actions/checkout@v4
 
@@ -151,8 +147,17 @@ jobs:
       - name: List Python versions
         run: maturin list-python
 
+      # Workaround for https://github.com/PyO3/maturin/pull/2083
+      - name: Debug metadata
+        run:
+          cargo metadata > /dev/null
+
       - name: Build wheels
         shell: bash
+        env:
+          RUST_LOG: "maturin=debug"
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
         run:
           maturin build \
             --interpreter=3.9 \

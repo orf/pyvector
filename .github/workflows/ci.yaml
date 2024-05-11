@@ -23,10 +23,10 @@ jobs:
         platform:
           - image: quay.io/pypa/manylinux_2_28_x86_64
             target: x86_64-unknown-linux-gnu
-          - image: quay.io/pypa/manylinux_2_28_x86_64
-            target: aarch64-unknown-linux-gnu
-          - image: quay.io/pypa/manylinux_2_28_x86_64
-            target: aarch64-unknown-linux-musl
+#          - image: quay.io/pypa/manylinux_2_28_x86_64
+#            target: aarch64-unknown-linux-gnu
+#          - image: quay.io/pypa/manylinux_2_28_x86_64
+#            target: aarch64-unknown-linux-musl
 
     container:
       image: "${{ matrix.platform.image }}"

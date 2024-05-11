@@ -250,5 +250,5 @@ jobs:
 #        with:
 #          command: upload
 #          args: --non-interactive --skip-existing wheels-*/*
-#      - name: Publish package distributions to PyPI
-#        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

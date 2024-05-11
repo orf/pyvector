@@ -239,7 +239,9 @@ jobs:
     #      id-token: write
     steps:
       - uses: actions/download-artifact@v4
-      - run: ls
+        with:
+          path: dist/
+      - run: ls dist/
 #      - name: Publish to PyPI
 #        uses: PyO3/maturin-action@v1
 #        env:

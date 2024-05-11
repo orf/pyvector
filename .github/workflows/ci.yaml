@@ -12,6 +12,8 @@ on:
 permissions:
   contents: read
 
+concurrency: "ci"
+
 jobs:
   linux:
     runs-on: ubuntu-latest
@@ -21,6 +23,10 @@ jobs:
         platform:
           - image: quay.io/pypa/manylinux_2_28_x86_64
             target: x86_64-unknown-linux-gnu
+          - image: quay.io/pypa/manylinux_2_28_x86_64
+            target: aarch64-unknown-linux-gnu
+          - image: quay.io/pypa/manylinux_2_28_x86_64
+            target: aarch64-unknown-linux-musl
 
     container:
       image: "${{ matrix.platform.image }}"
@@ -97,6 +103,7 @@ jobs:
   macos:
     runs-on: ${{ matrix.platform.runner }}
     strategy:
+      fail-fast: false
       matrix:
         platform:
           - runner: macos-latest
@@ -169,7 +176,7 @@ jobs:
           python3.9 -m pip install --upgrade pip wheel
           ls -la dist/
           python3.9 -mpip install pytest pytest-asyncio
-          python3.9 -mpip install pyvector-rs --find-links dist --force-reinstall --verbose
+          python3.9 -mpip install pyvector-rs --find-links dist/ --force-reinstall -vvv
           python3.9 -m pytest
 
   test:

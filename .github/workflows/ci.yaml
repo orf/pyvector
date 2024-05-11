@@ -45,7 +45,7 @@ jobs:
       - uses: rui314/setup-mold@v1
 
       - name: Setup Protocol Buffers compiler
-        uses: Noelware/setup-protoc@1.1.0
+        uses: Noelware/setup-protoc@1.2.0
         with:
           version: v26.1
 

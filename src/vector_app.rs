@@ -80,10 +80,9 @@ impl VectorApp {
 
     pub async fn stop(self) -> VectorApp {
         if let VectorApp::Running {
-            runtime,
             task,
             shutdown_notifier,
-            context,
+            ..
         } = self
         {
             shutdown_notifier.notify_one();

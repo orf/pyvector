@@ -1,10 +1,8 @@
 use once_cell::sync::OnceCell;
 use std::sync::Arc;
 use tokio::runtime::Runtime;
-use vector::app::{build_runtime, init_logging, ApplicationConfig};
+use vector::app::{build_runtime, init_logging};
 use vector::cli::LogFormat;
-use vector::config::Config;
-use vector::extra_context::ExtraContext;
 use vector::heartbeat;
 use vector::signal::{SignalPair, SignalRx};
 
@@ -34,19 +32,5 @@ impl VectorContext {
 
     pub fn new_subscription(&self) -> SignalRx {
         self.signals.handler.subscribe()
-    }
-
-    pub async fn create_application_config(
-        &self,
-        config: Config,
-        context: ExtraContext,
-    ) -> ApplicationConfig {
-        self.runtime.spawn(async move {
-            ApplicationConfig::from_config(
-                vec![],
-                config,
-                context.clone(),
-            ).await
-        }).await.unwrap().unwrap()
     }
 }

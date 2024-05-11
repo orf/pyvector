@@ -27,7 +27,11 @@ jobs:
     #            target: aarch64
     #            python: "3.10"
 
-    container: "${{ matrix.platform.image }}"
+    container:
+      image: "${{ matrix.platform.image }}"
+      # Mount host volumes so we can delete some stuff to free up space
+      volumes:
+        - "/:/host"
 
     steps:
       #      - name: Maximize build space
@@ -60,7 +64,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          yum update -y && yum install -y perl-core openssl openssl-devel pkgconfig python3.11-pip unzip libzstd-devel cmake
+          yum update -y
+          yum install --quiet -y perl-core openssl openssl-devel pkgconfig python3.11-pip unzip libzstd-devel cmake
+          
+      - name: Setup protoc
+        uses: arduino/setup-protoc@v3.0.0
 
       - name: Install maturin
         run: |
@@ -71,16 +79,21 @@ jobs:
           toolchain: stable
           targets: ${{ matrix.platform.target }}
 
-      - name: Rust Cache
-        uses: actions/cache@v3
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
         with:
-          path: |
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: "${{ runner.os }}-cargo-${{ matrix.platform.target }}-${{ matrix.platform.python }}-${{ hashFiles('Cargo.lock') }}"
-          restore-keys: "${{ runner.os }}-cargo-${{ matrix.platform.target }}-"
+          key: "${{ matrix.platform.target }}-${{ matrix.platform.python }}"
+          cache-on-failure: "true"
+#      - name: Rust Cache
+#        uses: actions/cache@v3
+#        with:
+#          path: |
+#            ~/.cargo/registry/index/
+#            ~/.cargo/registry/cache/
+#            ~/.cargo/git/db/
+#            target/
+#          key: "${{ runner.os }}-cargo-${{ matrix.platform.target }}-${{ matrix.platform.python }}-${{ hashFiles('Cargo.lock') }}"
+#          restore-keys: "${{ runner.os }}-cargo-${{ matrix.platform.target }}-"
 
       - name: Check
         run: cargo check

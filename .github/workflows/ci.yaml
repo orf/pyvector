@@ -67,18 +67,9 @@ jobs:
           dnf update --quiet -y
           dnf install --quiet -y perl-core openssl openssl-devel pkgconfig unzip libzstd-devel cmake wget tar openssl-devel
 
-      # Requires wget and tar
-      - name: Setup mold
-        uses: rui314/setup-mold@v1
-
       - name: Install Maturin
         run: |
           pipx install "maturin[zig,patchelf]"
-          
-      - name: Setup cargo config
-        run: |
-          mkdir -p .cargo/
-          cp misc/ci-mold-linker.toml .cargo/config.toml
 
       - name: List Python versions
         run: maturin list-python

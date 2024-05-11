@@ -53,10 +53,10 @@ jobs:
 #          cp misc/ci-mold-linker.toml .cargo/config.toml
 
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.platform.python }}
-          cache: 'pip'
+#      - uses: actions/setup-python@v5
+#        with:
+#          python-version: ${{ matrix.platform.python }}
+#          cache: 'pip'
 
       - name: Install maturin
         run: pipx install maturin

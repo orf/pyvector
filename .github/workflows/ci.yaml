@@ -58,14 +58,9 @@ jobs:
           key: "${{ matrix.platform.target }}"
           cache-targets: "false"
           cache-on-failure: "true"
-
-      - name: Cache Non-Rust dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
+          cache-directories: |
             /var/cache/dnf/
             /var/cache/pip/
-          key: "${{ runner.os }}-system-${{ matrix.platform.target }}"
 
       - name: Install DNF dependencies
         run: |

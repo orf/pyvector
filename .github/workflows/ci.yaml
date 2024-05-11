@@ -60,9 +60,6 @@ jobs:
       - name: Setup protoc
         uses: arduino/setup-protoc@v3.0.0
 
-      - name: Setup zig
-        uses: goto-bus-stop/setup-zig@v2
-
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -165,7 +162,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          brew install protobuf
+          brew install protobuf zstd
 
       - name: Setup sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.4
@@ -203,7 +200,7 @@ jobs:
 
       - name: Install Maturin
         run: |
-          pipx install "maturin[zig]"
+          pipx install "maturin"
 
       - name: Build wheels
         run: maturin build \

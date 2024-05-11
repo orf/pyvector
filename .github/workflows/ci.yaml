@@ -82,7 +82,7 @@ jobs:
           SCCACHE_GHA_ENABLED: "true"
           RUSTC_WRAPPER: "sccache"
         run: |
-          maturin build --interpreter=python3.9 --interpreter=python3.10 --interpreter=python3.11 --interpreter=python3.12 --profile=ci --target=${{ matrix.platform.target }} --out=dist
+          maturin build --interpreter=python3.9 --interpreter=python3.10 --interpreter=python3.11 --interpreter=python3.12 --profile=ci --target=${{ matrix.platform.target }} --out=dist --release
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -151,7 +151,7 @@ jobs:
           SCCACHE_GHA_ENABLED: "true"
           RUSTC_WRAPPER: "sccache"
         run: |
-          maturin build --interpreter=python3.9 --interpreter=python3.10 --interpreter=python3.11 --interpreter=python3.12 --profile=ci --target=${{ matrix.platform.target }} --out=dist
+          maturin build --interpreter=python3.9 --interpreter=python3.10 --interpreter=python3.11 --interpreter=python3.12 --profile=ci --target=${{ matrix.platform.target }} --out=dist --release
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4

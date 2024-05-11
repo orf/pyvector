@@ -103,6 +103,7 @@ jobs:
         with:
           key: "${{ matrix.platform.target }}"
           cache-targets: "false"
+          cache-on-failure: "true"
 
       - name: Cache sccache
         uses: actions/cache@v4
@@ -188,6 +189,7 @@ jobs:
         with:
           key: "${{ matrix.platform.target }}"
           cache-targets: "false"
+          cache-on-failure: "true"
 
       - uses: actions/setup-python@v5
         with:

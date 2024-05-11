@@ -176,9 +176,9 @@ jobs:
         shell: bash
         run: |
           set -e
-          pip install pytest pytest-asyncio
-          pip install pyvector-rs --find-links dist --force-reinstall
-          pytest
+          python3.9 -mpip install pytest pytest-asyncio
+          python3.9 -mpip install pyvector-rs --find-links dist --force-reinstall
+          python3.9 -m pytest
 
   test:
     runs-on: ubuntu-latest

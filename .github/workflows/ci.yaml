@@ -74,6 +74,10 @@ jobs:
       - name: List Python versions
         run: maturin list-python
 
+      - name: Debug metadata
+        run:
+          cargo metadata
+
       - name: Build wheels
         shell: bash
         env:

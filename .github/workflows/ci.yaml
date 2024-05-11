@@ -88,7 +88,6 @@ jobs:
             --interpreter=python3.11 \
             --interpreter=python3.12 \
             --profile=ci \
-            --manifest-path Cargo.toml \
             --target=${{ matrix.platform.target }} \ 
             --out=dist
 
@@ -165,7 +164,6 @@ jobs:
             --interpreter=3.11 \
             --interpreter=3.12 \
             --profile=ci \
-            --manifest-path Cargo.toml \
             --target=${{ matrix.platform.target }} \
             --out=dist
 

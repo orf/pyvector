@@ -175,8 +175,13 @@ jobs:
           set -e
           python3.9 -m pip install --upgrade pip wheel
           ls -la dist/
+          echo "Groups:"
+          echo
+          pip debug --verbose
+          echo 
+          echo
           python3.9 -mpip install pytest pytest-asyncio
-          python3.9 -mpip install pyvector-rs --find-links dist/ --force-reinstall -vvv
+          python3.9 -mpip install pyvector-rs --no-index --find-links dist/ --force-reinstall -vvv
           python3.9 -m pytest
 
   test:

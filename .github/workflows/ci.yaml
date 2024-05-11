@@ -85,7 +85,11 @@ jobs:
           mkdir -p .cargo/
           cp misc/ci-mold-linker.toml .cargo/config.toml
 
+      - name: List Python versions
+        run: maturin list-python
+
       - name: Build wheels
+        shell: bash
         run: >
           maturin build
             --interpreter=python3.9 
@@ -150,8 +154,12 @@ jobs:
       - name: Install Maturin
         run: |
           pipx install "maturin"
+          
+      - name: List Python versions
+        run: maturin list-python
 
       - name: Build wheels
+        shell: bash
         run: >
           maturin build
             --interpreter=3.9

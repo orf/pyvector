@@ -56,8 +56,6 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           key: "${{ matrix.platform.target }}"
-          cache-targets: "false"
-          cache-on-failure: "true"
           cache-directories: |
             /var/cache/dnf/
             /var/cache/pip/
@@ -124,8 +122,6 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           key: "${{ matrix.platform.target }}"
-          cache-targets: "false"
-          cache-on-failure: "true"
 
       - uses: actions/setup-python@v5
         with:

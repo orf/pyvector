@@ -91,7 +91,7 @@ jobs:
           SCCACHE_GHA_ENABLED: "true"
           RUSTC_WRAPPER: "sccache"
         run: |
-          maturin build --interpreter=python3.9 --interpreter=python3.10 --interpreter=python3.11 --interpreter=python3.12 --profile=ci --target=${{ matrix.platform.target }} --out=dist --release
+          maturin build --interpreter=python3.9 --interpreter=python3.10 --interpreter=python3.11 --interpreter=python3.12 --profile=ci --out=dist --release
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -175,42 +175,59 @@ jobs:
           set -e
           python3.9 -m pip install --upgrade pip wheel
           ls -la dist/
-          echo "Groups:"
-          echo
-          pip debug --verbose
-          echo 
+
           echo
           python3.9 -mpip install pytest pytest-asyncio
           python3.9 -mpip install pyvector-rs --no-index --find-links dist/ --force-reinstall -vvv
           python3.9 -m pytest
 
   test:
-    runs-on: ubuntu-latest
-    needs: [ linux ]
+    runs-on: ${{ matrix.platform.runner }}
+    needs: [ linux, macos ]
     strategy:
       fail-fast: false
       matrix:
         platform:
-          - python: "3.9"
-          - python: "3.10"
-          - python: "3.11"
-          - python: "3.12"
-
+          - runner: ubuntu-latest
+          - runner: macos-latest
+          - runner: macos-14
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           path: dist/
       - uses: actions/setup-python@v5
         with:
-          python-version: "${{ matrix.platform.python }}"
-      - name: Install deps
+          python-version: |
+            3.9
+            3.10
+            3.11
+            3.12
+          cache: pip
+      - name: Test 3.9
         run: |
-          pip install pytest pytest-asyncio
-      - name: Install wheel
+          python3.9 -mpip install --upgrade pip wheel
+          python3.9 -mpip install pytest pytest-asyncio
+          python3.9 -mpip pip install pyvector-rs --find-links dist --force-reinstall
+          python3.9 -m pytest
+      - name: Test 3.10
         run: |
-          pip install pyvector-rs --find-links dist --force-reinstall
-      - name: Run tests
-        run: pytest
+          python3.10 -mpip install --upgrade pip wheel
+          python3.10 -mpip install pytest pytest-asyncio
+          python3.10 -mpip pip install pyvector-rs --find-links dist --force-reinstall
+          python3.10 -m pytest
+      - name: Test 3.11
+        run: |
+          python3.11 -mpip install --upgrade pip wheel
+          python3.11 -mpip install pytest pytest-asyncio
+          python3.11 -mpip pip install pyvector-rs --find-links dist --force-reinstall
+          python3.11 -m pytest
+      - name: Test 3.12
+        run: |
+          python3.12 -mpip install --upgrade pip wheel
+          python3.12 -mpip install pytest pytest-asyncio
+          python3.12 -mpip pip install pyvector-rs --find-links dist --force-reinstall
+          python3.12 -m pytest
 
   sdist:
     runs-on: ubuntu-latest
@@ -234,9 +251,9 @@ jobs:
     #    if: "startsWith(github.ref, 'refs/tags/')"
     #    needs: [linux, windows, macos, sdist]
     needs: [ linux, macos, sdist, test ]
-      #    permissions:
+    permissions:
     # IMPORTANT: this permission is mandatory for trusted publishing
-    #      id-token: write
+      id-token: write
     steps:
       - uses: actions/download-artifact@v4
         with:

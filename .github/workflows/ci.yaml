@@ -73,17 +73,16 @@ jobs:
         run: |
           echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
           echo "SCCACHE_DIRECT=true" >> $GITHUB_ENV
-          echo "SCCACHE_DIR=/var/cache/sccache/" >> $GITHUB_ENV
+          echo "SCCACHE_DIR=${{ github.workspace }}/sccache/" >> $GITHUB_ENV
 
-      - name: Cache Sccache
-        uses: actions/cache@v4
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
         with:
-          path: |
-            /var/cache/sccache/
-          key: |
-            ${{ runner.os }}-sccache-${{ matrix.platform.target }}-${{ hashFiles('Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-sccache-${{ matrix.platform.target }}
+          key: "${{ matrix.platform.target }}"
+          cache-targets: "false"
+          cache-on-failure: "true"
+          cache-directories: |
+            ${{ github.workspace }}/sccache/
 
       - name: Cache Non-Rust dependencies
         uses: actions/cache@v4
@@ -97,21 +96,6 @@ jobs:
         run: |
           dnf update --quiet -y
           dnf install --quiet -y perl-core openssl openssl-devel pkgconfig unzip libzstd-devel cmake wget tar openssl-devel
-          
-      - name: Cache Rust registry
-        uses: Swatinem/rust-cache@v2
-        with:
-          key: "${{ matrix.platform.target }}"
-          cache-targets: "false"
-          cache-on-failure: "true"
-
-      - name: Cache sccache
-        uses: actions/cache@v4
-        with:
-          path: |
-            /var/cache/dnf/
-            /var/cache/pip/
-          key: "${{ runner.os }}-system-${{ matrix.platform.target }}"
 
       # Requires wget and tar
       - name: Setup mold
@@ -173,23 +157,15 @@ jobs:
           echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
           echo "SCCACHE_DIRECT=true" >> $GITHUB_ENV
           echo "SCCACHE_DIR=${{ github.workspace }}/sccache/" >> $GITHUB_ENV
-          
-      - name: Cache Sccache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ${{ github.workspace }}/sccache/
-          key: |
-            ${{ runner.os }}-sccache-${{ matrix.platform.target }}-${{ hashFiles('Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-sccache-${{ matrix.platform.target }}
 
-      - name: Cache Rust registry
+      - name: Cache Rust
         uses: Swatinem/rust-cache@v2
         with:
           key: "${{ matrix.platform.target }}"
           cache-targets: "false"
           cache-on-failure: "true"
+          cache-directories: |
+            ${{ github.workspace }}/sccache/
 
       - uses: actions/setup-python@v5
         with:

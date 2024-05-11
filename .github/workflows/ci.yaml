@@ -69,14 +69,14 @@ jobs:
 
       - name: Install Maturin
         run: |
-          pipx install "maturin[zig,patchelf]"
+          pipx install "maturin"
 
       - name: List Python versions
         run: maturin list-python
 
       - name: Debug metadata
         run:
-          cargo metadata
+          cargo metadata --no-deps
 
       - name: Build wheels
         shell: bash
@@ -89,6 +89,7 @@ jobs:
             --interpreter=python3.11 \
             --interpreter=python3.12 \
             --profile=ci \
+            --manifest-path Cargo.toml \
             --target=${{ matrix.platform.target }} \ 
             --out=dist
 
@@ -159,6 +160,7 @@ jobs:
             --interpreter=3.11 \
             --interpreter=3.12 \
             --profile=ci \
+            --manifest-path Cargo.toml \
             --target=${{ matrix.platform.target }} \
             --out=dist
 

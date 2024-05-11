@@ -75,7 +75,7 @@ jobs:
           targets: ${{ matrix.platform.target }}
 
       - name: Cache DNF dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             /var/cache/dnf
@@ -97,7 +97,7 @@ jobs:
           cache-on-failure: "true"
 
 #      - name: Rust Cache
-#        uses: actions/cache@v3
+#        uses: actions/cache@v4
 #        with:
 #          path: |
 #            ~/.cargo/registry/index/

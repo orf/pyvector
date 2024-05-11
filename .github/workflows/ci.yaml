@@ -88,10 +88,10 @@ jobs:
       - name: Build wheels
         run: >
           maturin build
-            --interpreter=3.9 
-            --interpreter=3.10
-            --interpreter=3.11
-            --interpreter=3.12
+            --interpreter=python3.9 
+            --interpreter=python3.10
+            --interpreter=python3.11
+            --interpreter=python3.12
             --profile=ci
             --target=${{ matrix.platform.target }} 
             --out=dist

@@ -83,7 +83,7 @@ jobs:
 
       - name: Install DNF dependencies
         run: |
-          dnf update -y
+          dnf update --quiet -y
           dnf install --quiet -y perl-core openssl openssl-devel pkgconfig python3.11-pip unzip libzstd-devel cmake
 
       - name: Install maturin
@@ -107,16 +107,16 @@ jobs:
 #          key: "${{ runner.os }}-cargo-${{ matrix.platform.target }}-${{ matrix.platform.python }}-${{ hashFiles('Cargo.lock') }}"
 #          restore-keys: "${{ runner.os }}-cargo-${{ matrix.platform.target }}-"
 
-#      - name: Check
-#        run: cargo check --profile=ci
+      - name: Check
+        run: cargo check --profile=ci
 
-      - name: Build Wheels
-        run: |
-          maturin build --zig \ 
-            --interpreter=python${{ matrix.platform.python }} \ 
-            --profile=ci \
-            --target=${{ matrix.platform.target }}
-  
+#      - name: Build Wheels
+#        run: |
+#          maturin build --zig \
+#            --interpreter=python${{ matrix.platform.python }} \
+#            --profile=ci \
+#            --target=${{ matrix.platform.target }}
+#
 
   #      - name: Build wheels
   #        uses: orf/maturin-action@move-pre-script

@@ -111,14 +111,15 @@ jobs:
           cp misc/ci-mold-linker.toml .cargo/config.toml
 
       - name: Build wheels
-        run: maturin build \
-          --interpreter=3.9 \ 
-          --interpreter=3.10 \
-          --interpreter=3.11 \
-          --interpreter=3.12 \
-          --profile=ci \
-          --target=${{ matrix.platform.target }} \ 
-          --out=dist
+        run: |
+          maturin build \
+            --interpreter=3.9 \ 
+            --interpreter=3.10 \
+            --interpreter=3.11 \
+            --interpreter=3.12 \
+            --profile=ci \
+            --target=${{ matrix.platform.target }} \ 
+            --out=dist
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -181,14 +182,15 @@ jobs:
           pipx install "maturin"
 
       - name: Build wheels
-        run: maturin build \
-          --interpreter=3.9 \
-          --interpreter=3.10 \
-          --interpreter=3.11 \
-          --interpreter=3.12 \
-          --profile=ci \
-          --target=${{ matrix.platform.target }} \
-          --out=dist
+        run: |
+          maturin build \
+            --interpreter=3.9 \
+            --interpreter=3.10 \
+            --interpreter=3.11 \
+            --interpreter=3.12 \
+            --profile=ci \
+            --target=${{ matrix.platform.target }} \
+            --out=dist
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4

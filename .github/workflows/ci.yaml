@@ -26,29 +26,12 @@ jobs:
       image: "${{ matrix.platform.image }}"
       env:
         PIP_CACHE_DIR: "/var/cache/pip/"
-      # Mount host volumes so we can delete some stuff to free up space
-#      volumes:
-#        - "/:/host"
+
+    env:
+      SCCACHE_GHA_ENABLED: "true"
+      RUSTC_WRAPPER: "sccache"
 
     steps:
-      #      - name: Maximize build space
-      #        run: |
-      #          echo "Before storage:"
-      #          sudo df -h
-      #
-      #          echo "::group::Clean"
-      #          sudo rm -rf /usr/share/dotnet &
-      #          sudo rm -rf /usr/local/lib/android &
-      #          sudo rm -rf /opt/ghc &
-      #          sudo rm -rf /opt/hostedtoolcache/CodeQL &
-      #          sudo docker system prune --force -q &
-      #
-      #          wait
-      #          echo "::endgroup::"
-      #
-      #          echo "After storage":
-      #          sudo df -h
-
       - uses: actions/checkout@v4
 
       # Bruh. This needs to be here before any cache
@@ -69,20 +52,12 @@ jobs:
       - name: Setup sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.4
 
-      - name: Configure sccache
-        run: |
-          echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
-          echo "SCCACHE_DIRECT=true" >> $GITHUB_ENV
-          echo "SCCACHE_DIR=${{ github.workspace }}/sccache/" >> $GITHUB_ENV
-
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
         with:
           key: "${{ matrix.platform.target }}"
           cache-targets: "false"
           cache-on-failure: "true"
-          cache-directories: |
-            ${{ github.workspace }}/sccache/
 
       - name: Cache Non-Rust dependencies
         uses: actions/cache@v4
@@ -137,6 +112,9 @@ jobs:
             target: x86_64-apple-darwin
           - runner: macos-14
             target: aarch64-apple-darwin
+    env:
+      SCCACHE_GHA_ENABLED: "true"
+      RUSTC_WRAPPER: "sccache"
     steps:
       - uses: actions/checkout@v4
 
@@ -153,20 +131,12 @@ jobs:
       - name: Setup sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.4
 
-      - name: Configure sccache
-        run: |
-          echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
-          echo "SCCACHE_DIRECT=true" >> $GITHUB_ENV
-          echo "SCCACHE_DIR=${{ github.workspace }}/sccache/" >> $GITHUB_ENV
-
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
         with:
           key: "${{ matrix.platform.target }}"
           cache-targets: "false"
           cache-on-failure: "true"
-          cache-directories: |
-            ${{ github.workspace }}/sccache/
 
       - uses: actions/setup-python@v5
         with:

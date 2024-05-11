@@ -69,15 +69,17 @@ jobs:
           
       - name: Setup protoc
         uses: arduino/setup-protoc@v3.0.0
+      - name: Setup zig
+        uses: goto-bus-stop/setup-zig@v2
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: ${{ matrix.platform.target }}
 
       - name: Install maturin
         run: |
           pipx install "maturin[zig,patchelf]"
-
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          targets: ${{ matrix.platform.target }}
 
       - name: Rust cache
         uses: Swatinem/rust-cache@v2

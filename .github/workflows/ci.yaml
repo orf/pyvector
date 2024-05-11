@@ -62,26 +62,35 @@ jobs:
       #          python-version: ${{ matrix.platform.python }}
       #          cache: 'pip'
 
-      - name: Install dependencies
-        run: |
-          yum update -y
-          yum install --quiet -y perl-core openssl openssl-devel pkgconfig python3.11-pip unzip libzstd-devel cmake
-          
       - name: Setup protoc
         uses: arduino/setup-protoc@v3.0.0
+
       - name: Setup zig
         uses: goto-bus-stop/setup-zig@v2
+
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
           targets: ${{ matrix.platform.target }}
 
+      - name: Cache DNF dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            /var/cache/dnf
+          key: "${{ runner.os }}-dnf-${{ matrix.platform.target }}"
+
+      - name: Install DNF dependencies
+        run: |
+          dnf update -y
+          dnf install --quiet -y perl-core openssl openssl-devel pkgconfig python3.11-pip unzip libzstd-devel cmake
+
       - name: Install maturin
         run: |
           pipx install "maturin[zig,patchelf]"
 
-      - name: Rust cache
+      - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
           key: "${{ matrix.platform.target }}-${{ matrix.platform.python }}"

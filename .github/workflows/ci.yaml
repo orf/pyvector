@@ -79,7 +79,7 @@ jobs:
       - name: List Python versions
         run: maturin list-python
 
-      # Workaround for https://github.com/PyO3/maturin/pull/2083
+      # Workaround for https://github.com/PyO3/maturin/pull/2083.
       - name: Debug metadata
         run:
           cargo metadata > /dev/null

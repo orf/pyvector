@@ -34,7 +34,7 @@ jobs:
       - name: Install zstd
         run: |
           dnf update --quiet -y
-          dnf install --quiet -y zstd
+          dnf install --quiet -y zstd wget tar
 
       - uses: rui314/setup-mold@v1
 

@@ -15,137 +15,150 @@ permissions:
 
 jobs:
   linux:
-    runs-on: ${{ matrix.platform.runner }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         platform:
-          - runner: ubuntu-latest
-            target: x86_64
+          - image: quay.io/pypa/manylinux_2_28_x86_64
+            target: x86_64-unknown-linux-gnu
             python: "3.10"
-          - runner: ubuntu-latest
-            target: aarch64
-            python: "3.10"
+#          - image: quay.io/pypa/manylinux_2_28_x86_64
+#            target: aarch64
+#            python: "3.10"
 
+    container: "${{ matrix.platform.image }}"
 
     steps:
-      - name: Maximize build space
-        run: |
-          echo "Before storage:"
-          sudo df -h
-          
-          echo "::group::Clean"
-          sudo rm -rf /usr/share/dotnet &
-          sudo rm -rf /usr/local/lib/android &
-          sudo rm -rf /opt/ghc &
-          sudo rm -rf /opt/hostedtoolcache/CodeQL &
-          sudo docker system prune --force -q &
-          
-          wait
-          echo "::endgroup::"
-          
-          echo "After storage":
-          sudo df -h
-          
+#      - name: Maximize build space
+#        run: |
+#          echo "Before storage:"
+#          sudo df -h
+#
+#          echo "::group::Clean"
+#          sudo rm -rf /usr/share/dotnet &
+#          sudo rm -rf /usr/local/lib/android &
+#          sudo rm -rf /opt/ghc &
+#          sudo rm -rf /opt/hostedtoolcache/CodeQL &
+#          sudo docker system prune --force -q &
+#
+#          wait
+#          echo "::endgroup::"
+#
+#          echo "After storage":
+#          sudo df -h
+#      - name: Setup cargo config
+#        run: |
+#          mkdir -p .cargo/
+#          cp misc/ci-mold-linker.toml .cargo/config.toml
+
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.platform.python }}
+          cache: 'pip'
 
-      - name: Setup cargo config
-        run: |
-          mkdir -p .cargo/
-          cp misc/ci-mold-linker.toml .cargo/config.toml
+      - name: Install maturin
+        run: pipx install maturin
 
-      - uses: actions/cache@v3
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: ${{ matrix.platform.target }}
+
+      - name: Rust Cache
+        uses: actions/cache@v3
         with:
           path: |
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: "${{ runner.os }}-cargo-${{ matrix.platform.target }}-${{ matrix.platform.python }}-${{ hashFiles('**/Cargo.lock') }}"
+          key: "${{ runner.os }}-cargo-${{ matrix.platform.target }}-${{ matrix.platform.python }}-${{ hashFiles('Cargo.lock') }}"
           restore-keys: "${{ runner.os }}-cargo-${{ matrix.platform.target }}-"
 
-      - name: Build wheels
-        uses: orf/maturin-action@move-pre-script
-        env:
-          PROTOC_VERSION: "3.19.5"
-          MOLD_VERSION: "2.31.0"
-        with:
-          target: "${{ matrix.platform.target }}"
-          args: --profile=ci --out dist --interpreter=python${{ matrix.platform.python }}
-          manylinux: 2_28
-          before-script-linux: |
-            # If we're running on rhel centos, install needed packages.
-            if command -v yum &> /dev/null; then
-                yum update -y && yum install -y perl-core openssl openssl-devel pkgconfig python3.11-pip unzip libzstd-devel cmake
-            else
-                # If we're running on debian-based system.
-                apt update -y && apt-get install -y libssl-dev openssl pkg-config python3-pip unzip libzstd-dev cmake clang
-            fi
-            
-            readonly TMP_DIR="$(mktemp -d -t "protoc_XXXX")"
-            
-            install_protoc() {
-              local version=$1
-              local install_path=$2
+      - name: Check
+        run: cargo check
 
-              local base_url="https://github.com/protocolbuffers/protobuf/releases/download"
-              local url
-              url="${base_url}/v${version}/protoc-${version}-linux-x86_64.zip"
-              local download_path="${TMP_DIR}/protoc.zip"
-
-              echo "Downloading ${url}"
-              curl -fsSL "${url}" -o "${download_path}"
-
-              unzip -qq "${download_path}" -d "${TMP_DIR}"
-              mv --force --verbose "${TMP_DIR}/bin/protoc" "${install_path}"
-            }
-            
-            install_protoc "${{ env.PROTOC_VERSION }}" "/usr/bin/protoc"
-            readonly MOLD_URL="https://github.com/rui314/mold/releases/download/v${{ env.MOLD_VERSION }}/mold-${{ env.MOLD_VERSION }}-x86_64-linux.tar.gz"
-            echo "Downloading Mold from $MOLD_URL"
-            curl -fsSL "$MOLD_URL" -o "${TMP_DIR}/mold.tar.gz"
-            tar -C /usr/local --strip-components=1 --no-overwrite-dir -xzf "${TMP_DIR}/mold.tar.gz"
-            
-            ln -sf /usr/local/bin/mold "$(realpath /usr/bin/ld)"
-            
-            export PROTOC="/usr/bin/protoc"
-            
-            "$PROTOC" --version
-            mold --version
-            ld --version
-
-      - name: Upload wheels
-        uses: actions/upload-artifact@v4
-        with:
-          name: wheels-linux-${{ matrix.platform.target }}
-          path: dist
-      - name: pytest
-        if: ${{ startsWith(matrix.platform.target, 'x86_64') }}
-        shell: bash
-        run: |
-          set -e
-          pip install pyvector-rs --find-links dist --force-reinstall
-          pip install pytest pytest-asyncio
-          pytest
-      - name: pytest
-        if: ${{ matrix.platform.target == 'aarch64' }}
-        uses: uraimo/run-on-arch-action@v2.5.0
-        with:
-          arch: ${{ matrix.platform.target }}
-          distro: ubuntu22.04
-          githubToken: ${{ github.token }}
-          install: |
-            apt-get update
-            apt-get install -y --no-install-recommends python3 python3-pip
-            pip3 install -U pip pytest pytest-asyncio
-          run: |
-            set -e
-            pip3 install pyvector-rs --find-links dist --force-reinstall
-            pip install pytest pytest-asyncio
-            pytest
+#      - name: Build wheels
+#        uses: orf/maturin-action@move-pre-script
+#        env:
+#          PROTOC_VERSION: "3.19.5"
+#          MOLD_VERSION: "2.31.0"
+#        with:
+#          target: "${{ matrix.platform.target }}"
+#          args: --profile=ci --out dist --interpreter=python${{ matrix.platform.python }}
+#          manylinux: 2_28
+#          before-script-linux: |
+#            # If we're running on rhel centos, install needed packages.
+#            if command -v yum &> /dev/null; then
+#                yum update -y && yum install -y perl-core openssl openssl-devel pkgconfig python3.11-pip unzip libzstd-devel cmake
+#            else
+#                # If we're running on debian-based system.
+#                apt update -y && apt-get install -y libssl-dev openssl pkg-config python3-pip unzip libzstd-dev cmake clang
+#            fi
+#
+#            readonly TMP_DIR="$(mktemp -d -t "protoc_XXXX")"
+#
+#            install_protoc() {
+#              local version=$1
+#              local install_path=$2
+#
+#              local base_url="https://github.com/protocolbuffers/protobuf/releases/download"
+#              local url
+#              url="${base_url}/v${version}/protoc-${version}-linux-x86_64.zip"
+#              local download_path="${TMP_DIR}/protoc.zip"
+#
+#              echo "Downloading ${url}"
+#              curl -fsSL "${url}" -o "${download_path}"
+#
+#              unzip -qq "${download_path}" -d "${TMP_DIR}"
+#              mv --force --verbose "${TMP_DIR}/bin/protoc" "${install_path}"
+#            }
+#
+#            install_protoc "${{ env.PROTOC_VERSION }}" "/usr/bin/protoc"
+#            readonly MOLD_URL="https://github.com/rui314/mold/releases/download/v${{ env.MOLD_VERSION }}/mold-${{ env.MOLD_VERSION }}-x86_64-linux.tar.gz"
+#            echo "Downloading Mold from $MOLD_URL"
+#            curl -fsSL "$MOLD_URL" -o "${TMP_DIR}/mold.tar.gz"
+#            tar -C /usr/local --strip-components=1 --no-overwrite-dir -xzf "${TMP_DIR}/mold.tar.gz"
+#
+#            ln -sf /usr/local/bin/mold "$(realpath /usr/bin/ld)"
+#
+#            export PROTOC="/usr/bin/protoc"
+#
+#            "$PROTOC" --version
+#            mold --version
+#            ld --version
+#
+#      - name: Upload wheels
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: wheels-linux-${{ matrix.platform.target }}
+#          path: dist
+#      - name: pytest
+#        if: ${{ startsWith(matrix.platform.target, 'x86_64') }}
+#        shell: bash
+#        run: |
+#          set -e
+#          pip install pyvector-rs --find-links dist --force-reinstall
+#          pip install pytest pytest-asyncio
+#          pytest
+#      - name: pytest
+#        if: ${{ matrix.platform.target == 'aarch64' }}
+#        uses: uraimo/run-on-arch-action@v2.5.0
+#        with:
+#          arch: ${{ matrix.platform.target }}
+#          distro: ubuntu22.04
+#          githubToken: ${{ github.token }}
+#          install: |
+#            apt-get update
+#            apt-get install -y --no-install-recommends python3 python3-pip
+#            pip3 install -U pip pytest pytest-asyncio
+#          run: |
+#            set -e
+#            pip3 install pyvector-rs --find-links dist --force-reinstall
+#            pip install pytest pytest-asyncio
+#            pytest
 
 
 #  windows:

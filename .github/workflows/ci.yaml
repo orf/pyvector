@@ -36,6 +36,8 @@ jobs:
           dnf update --quiet -y
           dnf install --quiet -y zstd
 
+      - uses: rui314/setup-mold@v1
+
       - name: Setup Protocol Buffers compiler
         uses: Noelware/setup-protoc@1.1.0
         with:

@@ -217,6 +217,7 @@ jobs:
         with:
           name: wheels-macos-${{ matrix.platform.target }}
           path: dist
+          retention-days: 1
 
       - name: pytest
         shell: bash
@@ -267,6 +268,7 @@ jobs:
         with:
           name: wheels-sdist
           path: dist
+          retention-days: 1
 
   release:
     name: Release

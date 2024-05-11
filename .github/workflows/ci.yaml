@@ -85,14 +85,14 @@ jobs:
 
       - name: Build wheels
         shell: bash
-        run: >
-          maturin build
-            --interpreter=python3.9 
-            --interpreter=python3.10
-            --interpreter=python3.11
-            --interpreter=python3.12
-            --profile=ci
-            --target=${{ matrix.platform.target }} 
+        run:
+          maturin build \
+            --interpreter=python3.9 \ 
+            --interpreter=python3.10 \
+            --interpreter=python3.11 \
+            --interpreter=python3.12 \
+            --profile=ci \
+            --target=${{ matrix.platform.target }} \ 
             --out=dist
 
       - name: Upload wheels
@@ -155,14 +155,14 @@ jobs:
 
       - name: Build wheels
         shell: bash
-        run: >
-          maturin build
-            --interpreter=3.9
-            --interpreter=3.10
-            --interpreter=3.11
-            --interpreter=3.12
-            --profile=ci
-            --target=${{ matrix.platform.target }}
+        run:
+          maturin build \
+            --interpreter=3.9 \
+            --interpreter=3.10 \
+            --interpreter=3.11 \
+            --interpreter=3.12 \
+            --profile=ci \
+            --target=${{ matrix.platform.target }} \
             --out=dist
 
       - name: Upload wheels

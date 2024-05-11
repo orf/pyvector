@@ -81,7 +81,7 @@ jobs:
           RUST_LOG: "maturin=debug"
           SCCACHE_GHA_ENABLED: "true"
           RUSTC_WRAPPER: "sccache"
-        run:
+        run: |
           maturin build \
             --interpreter=python3.9 \ 
             --interpreter=python3.10 \
@@ -158,8 +158,8 @@ jobs:
           RUST_LOG: "maturin=debug"
           SCCACHE_GHA_ENABLED: "true"
           RUSTC_WRAPPER: "sccache"
-        run:
-          maturin build \
+        run: |
+          maturin build 
             --interpreter=3.9 \
             --interpreter=3.10 \
             --interpreter=3.11 \

@@ -158,7 +158,7 @@ jobs:
           SCCACHE_GHA_ENABLED: "true"
           RUSTC_WRAPPER: "sccache"
         run: |
-          maturin build 
+          maturin build \
             --interpreter=3.9 \
             --interpreter=3.10 \
             --interpreter=3.11 \

@@ -85,6 +85,8 @@ jobs:
 
       - name: Build wheels
         shell: bash
+        env:
+          RUST_LOG: "maturin=debug"
         run:
           maturin build \
             --interpreter=python3.9 \ 

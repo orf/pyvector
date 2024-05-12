@@ -13,8 +13,8 @@ succeed. So you need to detect this (and other errors), keep them in memory, and
 
 But what if your process is asked to exit before these have been sent successfully? What do you do? And how do you 
 handle a large spike in send failures? You don't want messages to pile up and exhaust your memory, which would result in 
-you loosing all your messages. So you need some kind of disk buffer. And you need metrics around this, and logging, and 
-the rest.
+you loosing all your messages. So you need some kind of disk buffer. Plus you need metrics around this, logging, and 
+a bunch of other other stuff. 
 
 If you squint a bit, this begins to look a lot like [Vector](https://vector.dev/).
 

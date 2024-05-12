@@ -80,14 +80,15 @@ jobs:
         run: maturin list-python
 
       # Workaround for https://github.com/PyO3/maturin/pull/2083.
-      - name: Debug metadata
+      - name: Fetch dependencies
         run:
-          cargo metadata > /dev/null
+          cargo fetch
 
       - name: Build wheels
         shell: bash
         env:
           RUST_LOG: "maturin=debug"
+          RUSTFLAGS: "-C link-arg=-fuse-ld=mold"
           #SCCACHE_GHA_ENABLED: "true"
           #RUSTC_WRAPPER: "sccache"
         run: |
@@ -149,9 +150,9 @@ jobs:
         run: maturin list-python
 
       # Workaround for https://github.com/PyO3/maturin/pull/2083
-      - name: Debug metadata
+      - name: Fetch dependencies
         run:
-          cargo metadata > /dev/null
+          cargo fetch
 
       - name: Build wheels
         shell: bash

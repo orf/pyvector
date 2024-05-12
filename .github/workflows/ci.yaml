@@ -197,7 +197,7 @@ jobs:
         run: |
           python3.9 -mpip install --upgrade pip wheel
           python3.9 -mpip install pytest pytest-asyncio
-          python3.9 -mpip pip install pyvector-rs --find-links dist --force-reinstall
+          python3.9 -mpip install pyvector-rs --find-links dist --force-reinstall
           python3.9 -m pytest
       - name: Test 3.10
         run: |

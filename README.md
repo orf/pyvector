@@ -9,8 +9,9 @@ Install with `pip install pyvector-rs`.
 ## Sending messages _reliably_ can be quite hard
 
 SQS is pretty simple, right? When using SQS to send a batch of messages, individual messages can fail while the rest 
-succeed. So you need to detect this (and other errors), keep them in memory, and retry them with some kind of backoff. 
-But what if your process is asked to exist before these have been sent successfully? What do you do? And how do you 
+succeed. So you need to detect this (and other errors), keep them in memory, and retry them with some kind of backoff.
+
+But what if your process is asked to exit before these have been sent successfully? What do you do? And how do you 
 handle a large spike in send failures? You don't want messages to pile up and exhaust your memory, which would result in 
 you loosing all your messages. So you need some kind of disk buffer. And you need metrics around this, and logging, and 
 the rest.

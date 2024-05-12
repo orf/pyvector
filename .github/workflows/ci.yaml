@@ -89,8 +89,8 @@ jobs:
         env:
           RUST_LOG: "maturin=debug"
           RUSTFLAGS: "-C link-arg=-fuse-ld=mold"
-          #SCCACHE_GHA_ENABLED: "true"
-          #RUSTC_WRAPPER: "sccache"
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
         run: |
           maturin build --interpreter=python3.9 --interpreter=python3.10 --interpreter=python3.11 --interpreter=python3.12 --profile=ci --out=dist --release
 
@@ -169,18 +169,6 @@ jobs:
           name: wheels-macos-${{ matrix.platform.target }}
           path: dist
           retention-days: 1
-
-      - name: pytest
-        shell: bash
-        run: |
-          set -e
-          python3.9 -m pip install --upgrade pip wheel
-          ls -la dist/
-
-          echo
-          python3.9 -mpip install pytest pytest-asyncio
-          python3.9 -mpip install pyvector-rs --no-index --find-links dist/ --force-reinstall -vvv
-          python3.9 -m pytest
 
   test:
     runs-on: ${{ matrix.platform.runner }}

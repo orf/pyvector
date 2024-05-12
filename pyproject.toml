@@ -5,6 +5,7 @@ build-backend = "maturin"
 [project]
 name = "pyvector-rs"
 requires-python = ">=3.7"
+description = "Integrate Vector pipelines with Python"
 classifiers = [
     "Programming Language :: Rust",
     "Programming Language :: Python :: Implementation :: CPython",

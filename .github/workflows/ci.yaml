@@ -215,19 +215,19 @@ jobs:
         run: |
           python3.10 -mpip install --upgrade pip wheel
           python3.10 -mpip install pytest pytest-asyncio
-          python3.10 -mpip pip install pyvector-rs --find-links dist --force-reinstall
+          python3.10 -mpip install pyvector-rs --find-links dist --force-reinstall
           python3.10 -m pytest
       - name: Test 3.11
         run: |
           python3.11 -mpip install --upgrade pip wheel
           python3.11 -mpip install pytest pytest-asyncio
-          python3.11 -mpip pip install pyvector-rs --find-links dist --force-reinstall
+          python3.11 -mpip install pyvector-rs --find-links dist --force-reinstall
           python3.11 -m pytest
       - name: Test 3.12
         run: |
           python3.12 -mpip install --upgrade pip wheel
           python3.12 -mpip install pytest pytest-asyncio
-          python3.12 -mpip pip install pyvector-rs --find-links dist --force-reinstall
+          python3.12 -mpip install pyvector-rs --find-links dist --force-reinstall
           python3.12 -m pytest
 
   sdist:

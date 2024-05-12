@@ -1,6 +1,10 @@
 # pyvector-rs
 
+![PyPI - Version](https://img.shields.io/pypi/v/pyvector-rs) ![PyPI - Wheel](https://img.shields.io/pypi/wheel/pyvector-rs) ![PyPI - Wheel](https://img.shields.io/pypi/wheel/pyvector-rs)
+
 An _experiment_ to integrate the power of [Vector](https://vector.dev/) with Python!
+
+Install with `pip install pyvector-rs`.
 
 ## Sending messages _reliably_ can be quite hard
 

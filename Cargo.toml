@@ -15,7 +15,7 @@ derivative = "2.2.0"
 inventory = "0.3.15"
 serde = "1.0.200"
 serde_with = "3.8.1"
-toml = {version = "0.8.12", default-features = false}
+toml = {version = "0.8.13", default-features = false}
 typetag = "0.2.16"
 vector = { git = "https://github.com/vectordotdev/vector.git", tag = "v0.38.0", default-features = false, features = [
 

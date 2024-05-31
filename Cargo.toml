@@ -9,7 +9,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = { version = "0.21.2", features = ["extension-module", "experimental-async"] }
-tokio = { version = "1.37.0", features = ["full"] }
+tokio = { version = "1.38.0", features = ["full"] }
 async-trait = "0.1.80"
 derivative = "2.2.0"
 inventory = "0.3.15"

@@ -46,7 +46,7 @@ vector = { git = "https://github.com/vectordotdev/vector.git", tag = "v0.38.0", 
     "sinks-splunk_hec",
     "sinks-webhdfs",
 ] }
-vector-lib = { git = "https://github.com/vectordotdev/vector.git", tag = "v0.38.0", default-features = false}
+vector-lib = { git = "https://github.com/vectordotdev/vector.git", tag = "v0.39.0", default-features = false}
 tokio-stream = { version = "0.1.15", default-features = false }
 bytes = "1.6.0"
 openssl-probe = "0.1.5"
